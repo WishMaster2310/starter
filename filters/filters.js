@@ -1,9 +1,9 @@
 'use strict'
-let fs = require('fs');
-let path = require('path');
-let config = require('../config.json');
+const fs = require('fs');
+const path = require('path');
+const config = require('../config.json');
 
-let filters = {
+const filters = {
 	export: false,
 	loop: (arr, count) => {
 		let result = [];

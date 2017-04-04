@@ -18,7 +18,8 @@
 			"pageData": ["index"],
 			"pageVars": {
 				"title": "Заголовок страницы",
-				"description": "Описание страницы"
+				"description": "Описание страницы",
+				"og": true
 			}
 		}
 	]

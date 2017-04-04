@@ -5,11 +5,21 @@
     <title>{{ locals.title }}</title>
     <meta content="{{ locals.description }}" name="description">
     <meta content="" name="keywords">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="telephone=no" name="format-detection">
-    
+
+    {%- if locals.og %}
+    {%- if locals.image %}
+    <meta property="og:image" content="{{ locals.image|img_asset }}">
+    {%- endif %}
+    <meta property="og:title" content="{{ locals.title }}">
+    <meta property="og:description" content="{{ locals.description }}">
+    {%- endif %}
+
+    <link rel="shortcut icon" href="favicon.ico">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="HandheldFriendly" content="true">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
 
     <link href="{{ 'style.css'|css_asset }}" rel="stylesheet" type="text/css">
   </head>
