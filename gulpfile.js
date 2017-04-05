@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const path = require('path');
 const gulp = require('gulp');
+const del = require('del');
 const gutil = require('gulp-util');
 const less = require('gulp-less');
 const gls = require('gulp-live-server');
@@ -11,7 +12,6 @@ const replace = require('gulp-replace');
 const spritesmith = require('gulp.spritesmith');
 const merge = require('merge-stream');
 const sourcemaps = require('gulp-sourcemaps');
-const siteDB = require('./datasource/data.json');
 const LessPluginAutoPrefix = require('less-plugin-autoprefix');
 const LessPluginCleanCSS = require('less-plugin-clean-css');
 const uglify = require('gulp-uglify');
@@ -21,6 +21,8 @@ const babel = require('gulp-babel');
 const exec = require('child_process').exec;
 const gap = require('gulp-append-prepend');
 const config = require('./config.json');
+const runSequence = require('run-sequence');
+
 
 
 gulp.task('less:dev', () => {
@@ -135,15 +137,19 @@ gulp.task('default', () => {
   
 });
 
+gulp.task('clean', () => {
+  return del.sync([`${config.buildDir}/*`, `!${config.buildDir}/.git`, `!${config.buildDir}/.git/**`])
+})
+
 gulp.task('compileHtml', cb => {
   exec('node __export.js', (err, stdout, stderr) => {
     cb(err);
   });
 });
 
-gulp.task('exportHTML', ['compileHtml'], () => {
+gulp.task('exportHTML', () => {
   
-  gulp.src([ 'html/*.html'])
+  gulp.src(['html/*.html'])
     .pipe(prettify({
       indent_char: ' ',
       indent_size: 2
@@ -152,7 +158,7 @@ gulp.task('exportHTML', ['compileHtml'], () => {
 });
 
 
-gulp.task('copyStatic', ['less:prod', 'js'], () => {
+gulp.task('copyStatic', () => {
   let arr = ['public/**'];
   
   if (config.buildIgnore.length > 0 ) {
@@ -169,4 +175,11 @@ gulp.task('copyStatic', ['less:prod', 'js'], () => {
 
 });
 
-gulp.task('publish', ['exportHTML', 'copyStatic']);
+gulp.task('publish', ['compileHtml'], (cb) => {
+  runSequence('clean',
+              'exportHTML',
+              ['less:prod', 'js'],
+              'copyStatic',
+              cb)
+});
+//gulp.task('publish', ['exportHTML', 'copyStatic']);
