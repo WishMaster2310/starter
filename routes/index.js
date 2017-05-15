@@ -26,7 +26,10 @@ _.forEach(config.pages, page => {
 			locals: {},
 			common: commonData,
 			storage: `${config.devStatic}storage/`,
-			_env: process.env.NODE_ENV,
+			env: {
+				node: process.env.NODE_ENV,
+				svg: config.svg
+			},
 			layout
 		}
 

@@ -35,6 +35,8 @@
     "gulp-nunjucks-render": "^1.1.0",
     "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^1.6.0",
+    "gulp-svg-sprites": "^4.1.1",
+    "gulp-svgmin": "^1.2.3",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "gulp.spritesmith": "^6.1.0",

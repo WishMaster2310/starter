@@ -10,6 +10,7 @@
 	"contentOnly": false,
 	"storage": "https://your-path-to-blob",
 	"buildIgnore": ["less", "javascripts/sources"],
+	"svg": true,
 	"pages": [
 		{
 			"name": "index",

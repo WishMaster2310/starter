@@ -55,7 +55,10 @@ if (!fs.existsSync(compileDir)) {
 			root: config.buildStatic,
 		 	common: commonData,
 		 	isExport: true,
-			_env: process.env.NODE_ENV,
+		 	env: {
+				node: process.env.NODE_ENV,
+				svg: config.svg
+			},
 		 	locals: {},
 		 	storage: config.storage,
 			layout
