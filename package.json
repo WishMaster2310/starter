@@ -41,6 +41,7 @@
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1",
     "merge-stream": "^1.0.0",
+    "nanoid": "^0.2.0",
     "run-sequence": "^1.2.2"
   }
 }

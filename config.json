@@ -10,6 +10,7 @@
 	"contentOnly": false,
 	"storage": "https://your-path-to-blob",
 	"buildIgnore": ["less", "javascripts/sources"],
+	"assetsHash": true,
 	"pages": [
 		{
 			"name": "index",
