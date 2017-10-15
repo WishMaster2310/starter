@@ -22,7 +22,7 @@ const exec = require('child_process').exec;
 const gap = require('gulp-append-prepend');
 const config = require('./config.json');
 const runSequence = require('run-sequence');
-
+const imagemin = require('gulp-imagemin');
 
 
 gulp.task('less:dev', () => {
@@ -83,6 +83,21 @@ gulp.task('js', () => {
     .pipe(sourcemaps.write('../javascripts/'))
     .pipe(gulp.dest('public/javascripts/'));
 });
+
+gulp.task('imgmin', () =>
+    gulp.src(config.optimizeImages)
+      .pipe(imagemin([
+          imagemin.gifsicle({interlaced: true}),
+          imagemin.jpegtran({progressive: true}),
+          imagemin.optipng({optimizationLevel: 5}),
+          imagemin.svgo({
+              plugins: [
+                 // {removeViewBox: true},
+                  {cleanupIDs: false}
+              ]
+          })
+      ]))
+      .pipe(gulp.dest(`${config.buildDir}`)));
 
 gulp.task('compress', () => {
   return gulp.src(['public/javascripts/dist/*.js', 'public/javascripts/app.js'])
@@ -160,7 +175,7 @@ gulp.task('exportHTML', () => {
 
 gulp.task('copyStatic', () => {
   let arr = ['public/**'];
-  
+
   if (config.buildIgnore.length > 0 ) {
     _.each(config.buildIgnore, el => {
       if (el.split('.').length === 1 ) {
@@ -172,7 +187,6 @@ gulp.task('copyStatic', () => {
   }
   
   gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
-
 });
 
 gulp.task('publish', ['compileHtml'], (cb) => {
@@ -180,6 +194,7 @@ gulp.task('publish', ['compileHtml'], (cb) => {
               'exportHTML',
               ['less:prod', 'js'],
               'copyStatic',
+              'imgmin',
               cb)
 });
 //gulp.task('publish', ['exportHTML', 'copyStatic']);
