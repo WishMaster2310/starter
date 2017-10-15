@@ -11,6 +11,7 @@
 	"storage": "https://your-path-to-blob",
 	"buildIgnore": ["less", "javascripts/sources"],
 	"assetsHash": true,
+	"showPageList": true,
 	"pages": [
 		{
 			"name": "index",

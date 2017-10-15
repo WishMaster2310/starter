@@ -23,6 +23,8 @@ _.forEach(config.pages, page => {
 		
 		let context = {
 			root: config.devStatic,
+			_pages: config.pages,
+			_showPages: config.showPageList,
 			locals: {},
 			common: commonData,
 			storage: `${config.devStatic}storage/`,

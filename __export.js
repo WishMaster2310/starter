@@ -53,6 +53,8 @@ if (!fs.existsSync(compileDir)) {
 
 		context = {
 			root: config.buildStatic,
+		 	_pages: config.pages,
+		 	_showPages: config.showPageList,
 		 	common: commonData,
 		 	isExport: true,
 			_env: process.env.NODE_ENV,
