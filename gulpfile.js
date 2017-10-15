@@ -84,8 +84,9 @@ gulp.task('js', () => {
     .pipe(gulp.dest('public/javascripts/'));
 });
 
-gulp.task('imgmin', () =>
-    gulp.src(config.optimizeImages)
+gulp.task('imgmin', () => {
+
+    gulp.src('public/images/*')
       .pipe(imagemin([
           imagemin.gifsicle({interlaced: true}),
           imagemin.jpegtran({progressive: true}),
@@ -97,7 +98,7 @@ gulp.task('imgmin', () =>
               ]
           })
       ]))
-      .pipe(gulp.dest(`${config.buildDir}`)));
+      .pipe(gulp.dest(`${config.buildDir}/images`))});
 
 gulp.task('compress', () => {
   return gulp.src(['public/javascripts/dist/*.js', 'public/javascripts/app.js'])

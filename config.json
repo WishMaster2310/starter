@@ -11,10 +11,6 @@
 	"storage": "https://your-path-to-blob",
 	"buildIgnore": ["less", "javascripts/sources"],
 	"assetsHash": true,
-	"optimizeImages": [
-		"public/images/*",
-		"storage/images*"
-	],
 	"pages": [
 		{
 			"name": "index",
