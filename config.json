@@ -12,6 +12,8 @@
 	"buildIgnore": ["less", "javascripts/sources"],
 	"assetsHash": true,
 	"showPageList": true,
+	"exportWithExtension": ".html",
+	"exportIndexUrl": "/",
 	"pages": [
 		{
 			"name": "index",

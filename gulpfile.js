@@ -107,6 +107,13 @@ gulp.task('compress', () => {
     .pipe(gulp.dest('public/javascripts/'));
 });
 
+gulp.task('compressLib', () => {
+  return gulp.src(['public/javascripts/libs/*.js'])
+    .pipe(uglify())
+    .pipe(concat('libs.js'))
+    .pipe(gulp.dest('public/javascripts/'));
+});
+
 gulp.task('sprites', () => {
 
   let spriteData = gulp.src('public/__icons/*.png').pipe(spritesmith({
@@ -147,6 +154,7 @@ gulp.task('default', () => {
       server.notify.apply(server, [file]);
   });
 
+  gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
   gulp.watch(['public/__icons/*.png'], ['sprites']);

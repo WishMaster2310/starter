@@ -42,6 +42,22 @@ const filters = {
 		pushItem (0)
 		return result
 	},
+	link: (path = "/") => {
+		if(path === "/") {
+			if (filters.export) {
+				return config.exportIndexUrl
+			}else {
+				return path
+			}
+		} else {
+			const re = /(http[s]?:)?\/\//g;
+			if(filters.export && config.exportWithExtension && !re.test(path)) {
+				return path + config.exportWithExtension
+			} else  {
+				return path
+			}
+		}
+	},
 
 	asset: path => getAssetPath(path),
 	img_asset: path => getAssetPath(path, 'images/'),
