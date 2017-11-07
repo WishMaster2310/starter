@@ -22,7 +22,6 @@ const exec = require('child_process').exec;
 const gap = require('gulp-append-prepend');
 const config = require('./config.json');
 const runSequence = require('run-sequence');
-const imagemin = require('gulp-imagemin');
 
 
 gulp.task('less:dev', () => {
@@ -142,14 +141,14 @@ gulp.task('default', () => {
     'app.js', 
     'config.json', 
     'gulpfile.js', 
-    'routes/**/*.js'
+    'routes/**/*.js',
     ], file => {
       gutil.log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
       server.start.bind(server)();
       server.notify.apply(server, [file]);
   });
 
-  gulp.watch(['public/stylesheets/*.css', 'public/javascripts/*.js'], file => {
+  gulp.watch(['public/stylesheets/*.css', 'public/javascripts/*.js', 'public/images/sources/*'], file => {
       gutil.log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
       server.notify.apply(server, [file]);
   });
@@ -158,6 +157,7 @@ gulp.task('default', () => {
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
   gulp.watch(['public/__icons/*.png'], ['sprites']);
+  gulp.watch(['public/images/**/*.svg'], ['svg_sprite']);
   
 });
 

@@ -16,7 +16,7 @@
 	    		  if (ajax.status != 200) {
 	    		    alert(ajax.status + ': ' + ajax.statusText);
 	    		  } else {
-	    		  	var data = JSON.parse(ajax.responseText);
+	    		  	var data = JSON.parse(ajax.response);
 	    		  	if (data.error) {
 	    		  		alert(data.error)
 	    		  	}
