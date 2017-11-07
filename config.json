@@ -20,7 +20,7 @@
 			"route": "/",
 			"pageData": ["index"],
 			"pageVars": {
-				"title": "Заголовок страницы",
+				"title": "Главная страница",
 				"description": "Описание страницы",
 				"og": true
 			}
