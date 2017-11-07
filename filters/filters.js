@@ -3,8 +3,30 @@ const fs = require('fs');
 const path = require('path');
 const config = require('../config.json');
 
+
+function getAssetPath (p, dist = '') {
+	let result = "";
+
+	if(filters.export) {
+		if(config.dpe) {
+			result = `@File(${p})`
+		} else {
+			result = `${config.buildStatic}${dist + p}${getRevisionHash()}` 
+		}
+	} else{
+		result = `${config.devStatic}${dist + p}${getRevisionHash()}`
+	}
+	return result;
+}  
+
+function getRevisionHash ()  {
+	return config.assetsHash ? `?rev=${filters.hash}` : ''
+}
+
+
 const filters = {
 	export: false,
+	hash: 1,
 	loop: (arr, count) => {
 		let result = [];
 		let counter  = 0;
@@ -20,24 +42,31 @@ const filters = {
 		pushItem (0)
 		return result
 	},
+	link: (path = "/") => {
+		if(path === "/") {
+			if (filters.export) {
+				return config.exportIndexUrl
+			}else {
+				return path
+			}
+		} else {
+			const re = /(http[s]?:)?\/\//g;
+			if(filters.export && config.exportWithExtension && !re.test(path)) {
+				return path + config.exportWithExtension
+			} else  {
+				return path
+			}
+		}
+	},
 
-	asset: path => {
-		return filters.export ? config.dpe ? `@File(${path})` : `${config.buildStatic}${path}` : `${config.devStatic}${path}`
-	},
-	img_asset: path => {
-		return filters.export ? config.dpe ? `@File(\'images/${path}\')` : `${config.buildStatic}images/${path}` : `${config.devStatic}images/${path}`
-	},
-	uploads: path => {
-		return filters.export ? config.dpe ? `@File(\'uploads/${path}\')` : `${config.buildStatic}uploads/${path}` : `${config.devStatic}uploads/${path}`
-	},
-	js_asset: path => {
-		return filters.export ? config.dpe ? `@File(\'js/${path}\')` : `${config.buildStatic}javascripts/${path}` : `${config.devStatic}javascripts/${path}`
-	},
-	css_asset: path => {
-		return filters.export ? config.dpe ? `@File(\'css/${path}\')` : `${config.buildStatic}stylesheets/${path}` : `${config.devStatic}stylesheets/${path}`
-	},
+	asset: path => getAssetPath(path),
+	img_asset: path => getAssetPath(path, 'images/'),
+	uploads: path => getAssetPath(path, 'uploads/'),
+	js_asset: path => getAssetPath(path, 'javascripts/'),
+	css_asset: path => getAssetPath(path, 'stylesheets/'),
 	cdn: path => {
-		return filters.export ? `${config.storage}/${path}`: `${config.devStatic}storage/${path}` 
+		return filters.export ? 
+			`${config.storage}/${path}`: `${config.devStatic}storage/${path}` 
 	}
 }
 

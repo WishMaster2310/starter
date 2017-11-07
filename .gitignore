@@ -5,6 +5,7 @@ node_modules/*
 .idea/
 *.sublime-project
 *.sublime-workspace
-export/*
 html/*
 build/*
+package-lock.json
+./*zip

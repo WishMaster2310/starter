@@ -10,14 +10,17 @@
 	"contentOnly": false,
 	"storage": "https://your-path-to-blob",
 	"buildIgnore": ["less", "javascripts/sources"],
-	"svg": true,
+	"assetsHash": true,
+	"showPageList": true,
+	"exportWithExtension": ".html",
+	"exportIndexUrl": "/",
 	"pages": [
 		{
 			"name": "index",
 			"route": "/",
 			"pageData": ["index"],
 			"pageVars": {
-				"title": "Заголовок страницы",
+				"title": "Главная страница",
 				"description": "Описание страницы",
 				"og": true
 			}

@@ -11,11 +11,12 @@ const del = require('del');
 const env = nunjucks.configure('views', {
     autoescape: false,
 });
+const generate = require('nanoid/generate');
 
 let filters = require('./filters/filters');
 let commonData = {};
 
-
+filters.hash = generate('1234567890abcdef', 10);
 filters.export = true;
 
 _.each(filters, (func, name) => {
@@ -53,12 +54,11 @@ if (!fs.existsSync(compileDir)) {
 
 		context = {
 			root: config.buildStatic,
+		 	_pages: config.pages,
+		 	_showPages: config.showPageList,
+			_env: process.env.NODE_ENV,
 		 	common: commonData,
 		 	isExport: true,
-		 	env: {
-				node: process.env.NODE_ENV,
-				svg: config.svg
-			},
 		 	locals: {},
 		 	storage: config.storage,
 			layout

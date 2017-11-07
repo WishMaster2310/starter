@@ -22,28 +22,7 @@ const exec = require('child_process').exec;
 const gap = require('gulp-append-prepend');
 const config = require('./config.json');
 const runSequence = require('run-sequence');
-const svgSprite = require('gulp-svg-sprites');
-const svgmin = require('gulp-svgmin');
 
-gulp.task('svg_sprite', () => {
-  return gulp.src('public/images/**/*.svg')
-    .pipe(svgmin({
-      js2svg: {
-        pretty: true
-      }
-    }))
-    .pipe(replace('&gt;', '>'))
-    .pipe(svgSprite({
-        mode: "symbols",
-        preview: false,
-        selector: "icon-%f",
-        svg: {
-          symbols: 'sprite_svg.html'
-        }
-      }
-    ))
-    .pipe(gulp.dest('views/blocks/'));
-});
 
 gulp.task('less:dev', () => {
   var autoprefix = new LessPluginAutoPrefix({
@@ -104,10 +83,33 @@ gulp.task('js', () => {
     .pipe(gulp.dest('public/javascripts/'));
 });
 
+gulp.task('imgmin', () => {
+
+    gulp.src('public/images/*')
+      .pipe(imagemin([
+          imagemin.gifsicle({interlaced: true}),
+          imagemin.jpegtran({progressive: true}),
+          imagemin.optipng({optimizationLevel: 5}),
+          imagemin.svgo({
+              plugins: [
+                 // {removeViewBox: true},
+                  {cleanupIDs: false}
+              ]
+          })
+      ]))
+      .pipe(gulp.dest(`${config.buildDir}/images`))});
+
 gulp.task('compress', () => {
   return gulp.src(['public/javascripts/dist/*.js', 'public/javascripts/app.js'])
     .pipe(uglify())
     .pipe(concat('app.min.js'))
+    .pipe(gulp.dest('public/javascripts/'));
+});
+
+gulp.task('compressLib', () => {
+  return gulp.src(['public/javascripts/libs/*.js'])
+    .pipe(uglify())
+    .pipe(concat('libs.js'))
     .pipe(gulp.dest('public/javascripts/'));
 });
 
@@ -151,6 +153,7 @@ gulp.task('default', () => {
       server.notify.apply(server, [file]);
   });
 
+  gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
   gulp.watch(['public/__icons/*.png'], ['sprites']);
@@ -181,7 +184,7 @@ gulp.task('exportHTML', () => {
 
 gulp.task('copyStatic', () => {
   let arr = ['public/**'];
-  
+
   if (config.buildIgnore.length > 0 ) {
     _.each(config.buildIgnore, el => {
       if (el.split('.').length === 1 ) {
@@ -193,7 +196,6 @@ gulp.task('copyStatic', () => {
   }
   
   gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
-
 });
 
 gulp.task('publish', ['compileHtml'], (cb) => {
@@ -201,6 +203,7 @@ gulp.task('publish', ['compileHtml'], (cb) => {
               'exportHTML',
               ['less:prod', 'js'],
               'copyStatic',
+              'imgmin',
               cb)
 });
 //gulp.task('publish', ['exportHTML', 'copyStatic']);

@@ -1,15 +1,16 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var _ = require('lodash');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var routes = require('./routes/index');
-var starter = require('./routes/starter');
-var nunjucks = require('nunjucks');
-var filters = require('./filters/filters');
-var app = express();
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const _ = require('lodash');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const routes = require('./routes/index');
+const starter = require('./routes/starter');
+const nunjucks = require('nunjucks');
+const filters = require('./filters/filters');
+const app = express();
+const generate = require('nanoid/generate');
 
 
 // view engine setup
@@ -21,6 +22,8 @@ var env = nunjucks.configure('views', {
     express: app,
     watch: true
 });
+
+filters.hash = generate('1234567890abcdef', 10);
 
 _.each(filters, (func, name) => {
   if (name !== 'export') {
