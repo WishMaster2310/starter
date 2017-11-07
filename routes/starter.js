@@ -53,27 +53,35 @@ function getComponentLocation (file) {
 
 router.get('/add_less', (req, res, next) => {
 
-	var fileName = req.query.id.replace(/\s+/g, ''),
-			result = getComponentLocation(fileName),
+	let fileName = req.query.id.replace(/\s+/g, ''),
+			result,
 			content = '';
 			component = '';
 
-	if (!result.error) {
-		content = '.' + fileName + ' {\n\n}';
-		component = '\n@import \'' + fileName + '\';';
-		fs.writeFile(result.lessPath, content, (err) => {
-		  if (err) {
-		  	throw err;
-		  } else {
-		  	fs.appendFile(result.endpoint, component, 'utf8', (err) => {
-  				if(err) {
-  					throw err;
-  				}	
-  			});
-		  }
-		});
-	} 
-  res.send(result);
+	if(fileName.match(/[^a-z-_]/gi)) {
+		var data = {};
+		data.error = "Только латинские символы!";  
+		res.json(data);
+	} else {
+		result = getComponentLocation(fileName);
+		if (!result.error) {
+			content = `.${fileName}{\n\n}`;
+			component = `\n@import \'${fileName}\';`;
+			fs.writeFile(result.lessPath, content, err => {
+			  if (err) {
+			  	throw err;
+			  } else {
+			  	fs.appendFile(result.endpoint, component, 'utf8', (err) => {
+	  				if(err) {
+	  					throw err;
+	  				}	
+	  			});
+			  }
+			});
+		} 
+	  res.send(result);
+	};	
+
 });
 
 
