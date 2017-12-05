@@ -17,4 +17,4 @@ oShellLink.Description = "Shortcut Script"
 oShellLink.WorkingDirectory = "C:\Microsoft\Publisher\PrivatKey\"
 oShellLink.IconLocation = "C:\Microsoft\Publisher\PrivatKey\git-for-windows.ico"
 oShellLink.Save
-WshShell.Run "git.bat",0,True
+WshShell.Run "C:\Microsoft\Publisher\PrivatKey\git.bat",0,True

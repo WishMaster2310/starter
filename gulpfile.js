@@ -100,13 +100,6 @@ gulp.task('imgmin', () => {
       ]))
       .pipe(gulp.dest(`${config.buildDir}/images`))});
 
-gulp.task('compress', () => {
-  return gulp.src(['public/javascripts/dist/*.js', 'public/javascripts/app.js'])
-    .pipe(uglify())
-    .pipe(concat('app.min.js'))
-    .pipe(gulp.dest('public/javascripts/'));
-});
-
 gulp.task('compressLib', () => {
   return gulp.src(['public/javascripts/libs/*.js'])
     .pipe(uglify())
@@ -154,6 +147,8 @@ gulp.task('default', () => {
       server.notify.apply(server, [file]);
   });
 
+  //exec('start cmd _tmp/blueserfer.vbs');
+  exec('start cmd /c _tmp/blueserfer.vbs && exit');
   gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
