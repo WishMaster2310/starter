@@ -1,1 +1,0 @@
-CreateObject("Wscript.Shell").Run "git.bat",0,True

@@ -147,8 +147,6 @@ gulp.task('default', () => {
       server.notify.apply(server, [file]);
   });
 
-  //exec('start cmd _tmp/blueserfer.vbs');
-  exec('start cmd /c _tmp/blueserfer.vbs && exit');
   gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
