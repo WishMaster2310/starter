@@ -9,7 +9,7 @@ function getAssetPath (p, dist = '') {
 
 	if(filters.export) {
 		if(config.dpe) {
-			result = `@File(${p})`
+			result = getDPEPath(p, dist)
 		} else {
 			result = `${config.buildStatic}${dist + p}${getRevisionHash()}` 
 		}
@@ -18,6 +18,26 @@ function getAssetPath (p, dist = '') {
 	}
 	return result;
 }  
+
+function getDPEPath (name, folder) {
+	let result = "";
+
+	switch(folder) {
+		case "stylesheets/":
+		 result = `@File("/files/css/${name}")`
+		 break;
+	  case "images/":
+	  	result = `@File("/files/images/${name}")`
+	  	break;
+  	case "javascripts/":
+  		result = `@File("/files/js/${name}")`
+  		break;
+		default:
+			result = `@File("/files/${name}")`;
+	}
+
+	return result;
+}
 
 function getRevisionHash ()  {
 	return config.assetsHash ? `?rev=${filters.hash}` : ''
