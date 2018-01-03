@@ -20,8 +20,19 @@ const exec = require('child_process').exec;
 const gap = require('gulp-append-prepend');
 const runSequence = require('run-sequence');
 const imagemin = require('gulp-imagemin');
+const svgSprite = require("gulp-svg-symbols");
+
 const config = require('./config.json');
 
+gulp.task('sprites', function () {
+    return gulp.src('public/svg/*.svg')
+        .pipe(svgSprite({
+          id: "icon-%f",
+          svgClassname: "svg-store",
+          templates: ['default-svg']
+        }))
+        .pipe(gulp.dest("views/blocks"));
+});
 
 gulp.task('less:dev', () => {
   const autoprefix = new LessPluginAutoPrefix({

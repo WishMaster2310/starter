@@ -9,7 +9,7 @@
 	"emptyLayout": "empty_layout.html", 
 	"contentOnly": false,
 	"storage": "https://your-path-to-blob",
-	"buildIgnore": ["less", "images", "javascripts/sources"],
+	"buildIgnore": ["less", "images", "svg", "javascripts/sources"],
 	"assetsHash": true,
 	"showPageList": true,
 	"exportWithExtension": ".html",

@@ -1,0 +1,5 @@
+{% macro Icon(id, class) %}
+	<svg xmlns="http://www.w3.org/2000/svg" role="img" class="svg-icon svg-icon--{{ id }} {{ class }}">
+		<use xlink:href="#{{ id }}"></use>
+	</svg>
+{% endmacro %}
