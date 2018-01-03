@@ -1,34 +1,41 @@
 'use strict';
-const _ = require('lodash');
-const path = require('path');
-const gulp = require('gulp');
-const del = require('del');
-const log = require('fancy-log');
-const less = require('gulp-less');
-const gls = require('gulp-live-server');
-const prettify = require('gulp-html-prettify');
-const replace = require('gulp-replace');
-const merge = require('merge-stream');
-const sourcemaps = require('gulp-sourcemaps');
-const LessPluginAutoPrefix = require('less-plugin-autoprefix');
-const LessPluginCleanCSS = require('less-plugin-clean-css');
-const uglify = require('gulp-uglify');
-const concat = require('gulp-concat');
-const notify = require("gulp-notify");
-const babel = require('gulp-babel');
-const exec = require('child_process').exec;
-const gap = require('gulp-append-prepend');
-const runSequence = require('run-sequence');
-const imagemin = require('gulp-imagemin');
-const svgSprite = require("gulp-svg-symbols");
-
-const config = require('./config.json');
+const _ = require('lodash'),
+      path = require('path'),
+      gulp = require('gulp'),
+      del = require('del'),
+      log = require('fancy-log'),
+      less = require('gulp-less'),
+      gls = require('gulp-live-server'),
+      prettify = require('gulp-html-prettify'),
+      replace = require('gulp-replace'),
+      merge = require('merge-stream'),
+      sourcemaps = require('gulp-sourcemaps'),
+      LessPluginAutoPrefix = require('less-plugin-autoprefix'),
+      LessPluginCleanCSS = require('less-plugin-clean-css'),
+      uglify = require('gulp-uglify'),
+      concat = require('gulp-concat'),
+      notify = require("gulp-notify"),
+      babel = require('gulp-babel'),
+      exec = require('child_process').exec,
+      gap = require('gulp-append-prepend'),
+      runSequence = require('run-sequence'),
+      imagemin = require('gulp-imagemin'),
+      svgSprite = require("gulp-svg-symbols"),
+      svgo = require('gulp-svgo'),
+      config = require('./config.json');
 
 gulp.task('sprites', function () {
     return gulp.src('public/svg/*.svg')
+        .pipe(svgo({
+          removeXMLProcInst: true,
+          removeTitle: true,
+          removeComments: true,
+          removeStyleElement: true,
+          convertPathData: true
+        }))
         .pipe(svgSprite({
-          id: "icon-%f",
-          svgClassname: "svg-store",
+          id: "i-%f",
+          svgClassname: "svg-icon-store",
           templates: ['default-svg']
         }))
         .pipe(gulp.dest("views/blocks"));
@@ -133,6 +140,7 @@ gulp.task('default', () => {
   });
 
   gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
+  gulp.watch(['public/svg/*.svg'], ['sprites']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
   gulp.watch(['public/__icons/*.png'], ['sprites']);
