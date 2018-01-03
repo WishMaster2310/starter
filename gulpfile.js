@@ -3,13 +3,11 @@ const _ = require('lodash');
 const path = require('path');
 const gulp = require('gulp');
 const del = require('del');
-const gutil = require('gulp-util');
+const log = require('fancy-log');
 const less = require('gulp-less');
 const gls = require('gulp-live-server');
-const nunjucksRender = require('gulp-nunjucks-render');
 const prettify = require('gulp-html-prettify');
 const replace = require('gulp-replace');
-const spritesmith = require('gulp.spritesmith');
 const merge = require('merge-stream');
 const sourcemaps = require('gulp-sourcemaps');
 const LessPluginAutoPrefix = require('less-plugin-autoprefix');
@@ -20,13 +18,13 @@ const notify = require("gulp-notify");
 const babel = require('gulp-babel');
 const exec = require('child_process').exec;
 const gap = require('gulp-append-prepend');
-const config = require('./config.json');
 const runSequence = require('run-sequence');
 const imagemin = require('gulp-imagemin');
+const config = require('./config.json');
 
 
 gulp.task('less:dev', () => {
-  var autoprefix = new LessPluginAutoPrefix({
+  const autoprefix = new LessPluginAutoPrefix({
     browsers: ["last 2 versions"]
   });
 
@@ -41,7 +39,6 @@ gulp.task('less:dev', () => {
         title: "Less Compile Error"
       }))
     )
-
     //.pipe(sourcemaps.write('.', {includeContent: false, mapSources: 'public/less/**'}))
     .pipe(gulp.dest('public/stylesheets/'));
 });
@@ -72,7 +69,7 @@ gulp.task('js', () => {
   return gulp.src('public/javascripts/sources/*.js')
     .pipe(sourcemaps.init())
     .pipe(babel({
-      presets: ['es2015']
+      presets: ['env']
     })
       .on('error', notify.onError({
         message: "Error: <%= error.message %>",
@@ -85,18 +82,12 @@ gulp.task('js', () => {
 });
 
 gulp.task('imgmin', () => {
-
     gulp.src('public/images/*')
       .pipe(imagemin([
           imagemin.gifsicle({interlaced: true}),
           imagemin.jpegtran({progressive: true}),
           imagemin.optipng({optimizationLevel: 5}),
-          imagemin.svgo({
-              plugins: [
-                 // {removeViewBox: true},
-                  {cleanupIDs: false}
-              ]
-          })
+          imagemin.svgo({})
       ]))
       .pipe(gulp.dest(`${config.buildDir}/images`))});
 
@@ -105,23 +96,6 @@ gulp.task('compressLib', () => {
     .pipe(uglify())
     .pipe(concat('libs.js'))
     .pipe(gulp.dest('public/javascripts/'));
-});
-
-gulp.task('sprites', () => {
-
-  let spriteData = gulp.src('public/__icons/*.png').pipe(spritesmith({
-    imgName: 'iconset.png',
-    cssName: 'c-icon.less',
-    padding: 10,
-    cssTemplate: 'icons.hbs'
-  }));
-
-  let imgStream = spriteData.img
-    .pipe(gulp.dest('public/images/'));
-  let cssStream = spriteData.css
-    .pipe(gulp.dest('public/less/components/'));
-
-  return merge(imgStream, cssStream);
 });
 
 gulp.task('default', () => {
@@ -137,13 +111,13 @@ gulp.task('default', () => {
     'gulpfile.js', 
     'routes/**/*.js'
     ], file => {
-      gutil.log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
+      log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
       server.start.bind(server)();
       server.notify.apply(server, [file]);
   });
 
   gulp.watch(['public/stylesheets/*.css', 'public/javascripts/*.js'], file => {
-      gutil.log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
+      log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
       server.notify.apply(server, [file]);
   });
 
@@ -177,7 +151,6 @@ gulp.task('exportHTML', () => {
 
 gulp.task('copyStatic', () => {
   let arr = ['public/**'];
-
   if (config.buildIgnore.length > 0 ) {
     _.each(config.buildIgnore, el => {
       if (el.split('.').length === 1 ) {
@@ -191,7 +164,7 @@ gulp.task('copyStatic', () => {
   gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
 });
 
-gulp.task('publish', ['compileHtml'], (cb) => {
+gulp.task('publish', ['compileHtml'], cb => {
   runSequence('clean',
               'exportHTML',
               ['less:prod', 'js'],
@@ -199,4 +172,3 @@ gulp.task('publish', ['compileHtml'], (cb) => {
               'imgmin',
               cb)
 });
-//gulp.task('publish', ['exportHTML', 'copyStatic']);
