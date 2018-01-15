@@ -41,9 +41,7 @@ if (!fs.existsSync(compileDir)) {
 	del.sync([`${compileDir}/*.html`]);
 
 	_.forEach(config.pages, page => {
-
 		let template, context, res, layout;
-
 		layout = page.layout || config.defaultLayout;
 
 		if (config.contentOnly) {
