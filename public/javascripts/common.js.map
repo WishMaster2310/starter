@@ -1,1 +1,1 @@
-{"version":3,"sources":["common.js"],"names":[],"mappings":"AAAA","file":"../sources/common.js","sourcesContent":["\"use strict\";"]}
+{"version":3,"sources":["common.js"],"names":["_a","require","a","test","arr","find","n"],"mappings":"AAAA,YACA,IAAAA,IAAAC,QAAA,WADIC,EAAI,GAER,EAAAF,GAAAG,OACA,IAAIC,MAAO,EAAG,EAAG,EACjBA,KAAIC,KAAK,SAAAC,GAAA,MAAKA,GAAE","file":"../sources/common.js","sourcesContent":["let a = 2;\r\nimport {test} from '../a.js'\r\ntest()\r\nlet arr = [1, 2, 3]\r\narr.find(n => n%3)"]}

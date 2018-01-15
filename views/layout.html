@@ -9,11 +9,11 @@
     <meta content="telephone=no" name="format-detection">
 
     {%- if locals.og %}
-    {%- if locals.image %}
-    <meta property="og:image" content="{{ locals.image|img_asset }}">
-    {%- endif %}
-    <meta property="og:title" content="{{ locals.title }}">
-    <meta property="og:description" content="{{ locals.description }}">
+      {%- if locals.image %}
+      <meta property="og:image" content="{{ locals.image|img_asset }}">
+      {%- endif %}
+      <meta property="og:title" content="{{ locals.title }}">
+      <meta property="og:description" content="{{ locals.description }}">
     {%- endif %}
 
     <link rel="shortcut icon" href="favicon.ico">
@@ -24,6 +24,8 @@
     <link href="{{ 'style.css'|css_asset }}" rel="stylesheet" type="text/css">
   </head>
   <body>
+    {% import 'macros/macro.html' as Macros %}
+    {% include "blocks/svg-symbols.svg" %}
     {% block content %}{% endblock content %}
 
     
