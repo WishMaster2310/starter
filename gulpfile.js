@@ -14,13 +14,13 @@ const _ = require('lodash'),
       LessPluginCleanCSS = require('less-plugin-clean-css'),
       uglify = require('gulp-uglify'),
       concat = require('gulp-concat'),
-      notify = require("gulp-notify"),
+      notify = require('gulp-notify'),
       babel = require('gulp-babel'),
       exec = require('child_process').exec,
       gap = require('gulp-append-prepend'),
       runSequence = require('run-sequence'),
       imagemin = require('gulp-imagemin'),
-      svgSprite = require("gulp-svg-symbols"),
+      svgSprite = require('gulp-svg-symbols'),
       svgo = require('gulp-svgo'),
       config = require('./config.json');
 
@@ -114,6 +114,14 @@ gulp.task('compressLib', () => {
     .pipe(uglify())
     .pipe(concat('libs.js'))
     .pipe(gulp.dest('public/javascripts/'));
+});
+
+gulp.task('lodash', cb => {
+  // require npm install -g lodash-cli
+  return exec(`lodash ${config.lodash} -p -o "public/javascripts/libs/lodash.custom.min.js"`, (err, stdout, stderr) => {
+    console.log(`lodash file created with: ${config.lodash}`);
+    cb(err)
+  })
 });
 
 gulp.task('default', () => {

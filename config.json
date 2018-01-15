@@ -14,6 +14,7 @@
 	"showPageList": true,
 	"exportWithExtension": ".html",
 	"exportIndexUrl": "/",
+	"lodash": "include=each,filter,map,find,findIndex,sortBy",
 	"pages": [
 		{
 			"name": "index",
