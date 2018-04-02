@@ -26,13 +26,13 @@ const _ = require('lodash'),
 
 gulp.task('sprites', function () {
     return gulp.src('public/svg/*.svg')
-        .pipe(svgo({
+        /*.pipe(svgo({
           removeXMLProcInst: true,
           removeTitle: true,
           removeComments: true,
           removeStyleElement: true,
           convertPathData: true
-        }))
+        }))*/
         .pipe(svgSprite({
           id: "i-%f",
           svgClassname: "svg-icon-store",
