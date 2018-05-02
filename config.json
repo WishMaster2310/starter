@@ -14,6 +14,7 @@
 	"showPageList": true,
 	"exportWithExtension": ".html",
 	"exportIndexUrl": "/",
+	"themeColor": "#00bcf2",
 	"lodash": "include=each,filter,map,find,findIndex,sortBy",
 	"pages": [
 		{

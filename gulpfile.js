@@ -150,8 +150,7 @@ gulp.task('default', () => {
   gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
   gulp.watch(['public/svg/*.svg'], ['sprites']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
-  gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
-  gulp.watch(['public/__icons/*.png'], ['sprites']);
+  gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev'])
   
 });
 

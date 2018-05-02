@@ -9,26 +9,30 @@ const components = path.join(__dirname, '..', 'public/less/components/components
 
 function getComponentLocation (file) {
 	const letter = file.slice(0, 2);
+	const fName = file[1] === ':' ? file.slice(2) : file;
 	let dir = false;
 	let result = {};
 
 	switch(letter) {
-		case 'c-': 
+		case 'c:': 
 		  dir = 'components'
 			break
-		case 'm-': 
+		case 'u:': 
+		  dir = 'utilites'
+		  break
+		case 'm:': 
 		  dir = 'mixins'
 			break
-		case 'h-': 
+		case 'h:': 
 		  dir = 'helpers'
+		  break
 		default: 
 		  dir = 'components'
-			break
 	}
 
 	const endpoint = path.join(__dirname, '..', 'public/less/', dir, dir + '.less');
 	const endpointDir = path.join(__dirname, '..', 'public/less/', dir);
-	const lessPath = path.join(__dirname, '..', 'public/less/', dir, file + '.less');
+	const lessPath = path.join(__dirname, '..', 'public/less/', dir, fName + '.less');
 
 	try {
 		const access = fs.accessSync(lessPath);
@@ -43,7 +47,8 @@ function getComponentLocation (file) {
 				result = {
 					endpoint, 
 					lessPath, 
-					endpointDir
+					endpointDir,
+					fName
 				}
 			} else {
 				result = {error: `Что то не так с доступом к файлу\n ${lessPath}`}
@@ -64,8 +69,8 @@ router.get('/add_less', (req, res, next) => {
 			component = '';
 
 	if (!result.error) {
-		content = `.${fileName}{\n\n}`;
-		component = `\n@import \'${fileName}\';`;
+		content = `.${result.fName}{\n\n}`;
+		component = `\n@import \'${result.fName}\';`;
 		fs.writeFile(result.lessPath, content, err => {
 		  if (err) {
 		  	throw err;

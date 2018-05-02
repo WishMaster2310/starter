@@ -29,6 +29,7 @@ _.forEach(config.pages, page => {
 			common: commonData,
 			storage: `${config.devStatic}storage/`,
 			_env: process.env.NODE_ENV,
+			themeColor: config.themeColor,
 			layout
 		}
 
