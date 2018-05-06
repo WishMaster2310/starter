@@ -169,7 +169,9 @@ gulp.task('exportHTML', () => {
   gulp.src(['html/*.html'])
     .pipe(prettify({
       indent_char: ' ',
-      indent_size: 2
+      indent_size: 2,
+      unformatted: [],
+      no_preserve_newlines: true
     }))
     .pipe(gulp.dest(`${config.buildDir}`));
 });
