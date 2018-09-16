@@ -100,7 +100,7 @@ gulp.task('js', () => {
 });
 
 gulp.task('imgmin', () => {
-    gulp.src('public/images/*')
+    return gulp.src('public/images/*')
       .pipe(imagemin([
           imagemin.gifsicle({interlaced: true}),
           imagemin.jpegtran({progressive: true}),
@@ -166,7 +166,7 @@ gulp.task('compileHtml', cb => {
 
 gulp.task('exportHTML', () => {
   
-  gulp.src(['html/*.html'])
+  return gulp.src(['html/*.html'])
     .pipe(prettify({
       indent_char: ' ',
       indent_size: 2,
@@ -189,7 +189,7 @@ gulp.task('copyStatic', () => {
     })
   }
   
-  gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
+  return gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
 });
 
 gulp.task('publish', ['compileHtml'], cb => {
