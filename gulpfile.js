@@ -7,8 +7,6 @@ const _ = require('lodash'),
       less = require('gulp-less'),
       gls = require('gulp-live-server'),
       prettify = require('gulp-html-prettify'),
-      replace = require('gulp-replace'),
-      merge = require('merge-stream'),
       sourcemaps = require('gulp-sourcemaps'),
       LessPluginAutoPrefix = require('less-plugin-autoprefix'),
       LessPluginCleanCSS = require('less-plugin-clean-css'),
@@ -21,18 +19,10 @@ const _ = require('lodash'),
       runSequence = require('run-sequence'),
       imagemin = require('gulp-imagemin'),
       svgSprite = require('gulp-svg-symbols'),
-      svgo = require('gulp-svgo'),
       config = require('./config.json');
 
 gulp.task('sprites', function () {
     return gulp.src('public/svg/*.svg')
-        /*.pipe(svgo({
-          removeXMLProcInst: true,
-          removeTitle: true,
-          removeComments: true,
-          removeStyleElement: true,
-          convertPathData: true
-        }))*/
         .pipe(svgSprite({
           id: "i-%f",
           svgClassname: "svg-icon-store",
@@ -102,10 +92,9 @@ gulp.task('js', () => {
 gulp.task('imgmin', () => {
     return gulp.src('public/images/*')
       .pipe(imagemin([
-          imagemin.gifsicle({interlaced: true}),
-          imagemin.jpegtran({progressive: true}),
-          imagemin.optipng({optimizationLevel: 5}),
-          imagemin.svgo({})
+          imagemin.gifsicle({ interlaced: true }),
+          imagemin.jpegtran({ progressive: true }),
+          imagemin.optipng({ optimizationLevel: 5 }),
       ]))
       .pipe(gulp.dest(`${config.buildDir}/images`))});
 
@@ -142,7 +131,11 @@ gulp.task('default', () => {
       server.notify.apply(server, [file]);
   });
 
-  gulp.watch(['public/stylesheets/*.css', 'public/javascripts/*.js'], file => {
+  gulp.watch([
+    'public/stylesheets/*.css',
+    'public/javascripts/*.js'
+    ], 
+    file => {
       log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
       server.notify.apply(server, [file]);
   });
@@ -150,27 +143,29 @@ gulp.task('default', () => {
   gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
   gulp.watch(['public/svg/*.svg'], ['sprites']);
   gulp.watch(['public/javascripts/sources/*.js'], ['js']);
-  gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev'])
-  
+  gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
 });
 
 gulp.task('clean', () => {
-  return del.sync([`${config.buildDir}/*`, `!${config.buildDir}/.git`, `!${config.buildDir}/.git/**`])
+  return del.sync([
+    `${config.buildDir}/*`,
+    `!${config.buildDir}/.git`,
+    `!${config.buildDir}/.git/**`
+  ])
 })
 
 gulp.task('compileHtml', cb => {
-  exec('node __export.js', (err, stdout, stderr) => {
+  exec('node __export.js', (err) => {
     cb(err);
   });
 });
 
 gulp.task('exportHTML', () => {
-  
   return gulp.src(['html/*.html'])
     .pipe(prettify({
       indent_char: ' ',
       indent_size: 2,
-      unformatted: [],
+      //unformatted: [],
       no_preserve_newlines: true
     }))
     .pipe(gulp.dest(`${config.buildDir}`));

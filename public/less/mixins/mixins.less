@@ -16,3 +16,14 @@
 
 @import 'grid-framework';
 @import 'grid';
+
+.MQMaxWidth(@width; @rules) {
+  @media only screen and (max-width: @width) {
+    @rules();
+  }
+}
+.MQMinWidth(@width; @rules) {
+  @media only screen and (min-width: @width) {
+    @rules();
+  }
+}
