@@ -36,7 +36,6 @@ if (!fs.existsSync(compileDir)) {
 
 	_.forEach(config.pages, page => {
 		const {options} = getPageContext(page, true);
-
 		const template = fs.readFileSync(path.join(templateDir, `${page.name}.html`));
 		const res = nunjucks.render(path.join(templateDir, `${page.name}.html`), options);
 		fs.writeFileSync(path.join(compileDir, `${page.name}.html`), res);
