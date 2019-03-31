@@ -5,6 +5,11 @@ node_modules/*
 .idea/
 *.sublime-project
 *.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 html/*
 build/*
 package-lock.json
