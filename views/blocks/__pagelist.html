@@ -117,6 +117,6 @@
   <label for="__pageListInput">pages <span>{{ _pages.length }}</span></label>
   <div>
   <ul>{%- for item in _pages  -%} <li><a href="{{ item.route  | link }}">{{ loop.index }}.&nbsp;{{ item.pageVars.title }}</a></li> {%- endfor -%}</ul>
-  <div>
+  </div>
 </div>
 <!-- / PageList  -->
