@@ -14,18 +14,14 @@ function getCommonData()  {
 			result[name] = d
 		});
 	}
-
 	return result
 }
 
 function getPageContext (page, isExport) {
 	let layout = page.layout || config.defaultLayout;
-
 	if (config.contentOnly) {
 		layout = config.emptyLayout
 	}
-	console.log('layout')
-
 	const options = {
 		root: config.buildStatic,
 	 	_pages: config.pages,
@@ -51,8 +47,5 @@ function getPageContext (page, isExport) {
 	 		options.locals[k] = v
 	 	});
 	}
-	
-	return {
-		options
-	}
+  return { options }
 }

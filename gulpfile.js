@@ -22,13 +22,13 @@ const _ = require('lodash'),
       config = require('./config.json');
 
 gulp.task('sprites', function () {
-    return gulp.src('public/svg/*.svg')
-        .pipe(svgSprite({
-          id: "i-%f",
-          svgClassname: "svg-icon-store",
-          templates: ['default-svg']
-        }))
-        .pipe(gulp.dest("views/blocks"));
+  return gulp.src('public/svg/*.svg')
+    .pipe(svgSprite({
+      id: "i-%f",
+      svgClassname: "svg-icon-store",
+      templates: ['default-svg']
+    }))
+    .pipe(gulp.dest("views/blocks"));
 });
 
 gulp.task('less:dev', () => {
@@ -53,12 +53,12 @@ gulp.task('less:dev', () => {
 
 gulp.task('less:prod', () => {
   let cleancss = new LessPluginCleanCSS({
-      advanced: true
-    });
+    advanced: true
+  });
 
   let autoprefix = new LessPluginAutoPrefix({
-      browsers: ["last 10 versions", "IE 8", "IE 9", "IE 10", "IE 11"]
-    });
+    browsers: ["last 10 versions", "IE 8", "IE 9", "IE 10", "IE 11"]
+  });
 
   return gulp.src('public/less/*.less')
     .pipe(gap.prependText(`@storage: "${config.storage}";`))
@@ -76,9 +76,7 @@ gulp.task('less:prod', () => {
 gulp.task('js', () => {
   return gulp.src('public/javascripts/sources/*.js')
     .pipe(sourcemaps.init())
-    .pipe(babel({
-      presets: ['env']
-    })
+    .pipe(babel({ presets: ['env'] })
       .on('error', notify.onError({
         message: "Error: <%= error.message %>",
         title: "JS Compile Error"

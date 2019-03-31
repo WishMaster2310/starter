@@ -9,10 +9,8 @@
 	    		var ajax = new XMLHttpRequest();
 	    		ajax.open('GET', '/starter/add_less?id=' + component, true);
 	    		ajax.send(null);
-
 	    		ajax.onreadystatechange = function() {
 	    		  if (ajax.readyState != 4) return;
-
 	    		  if (ajax.status != 200) {
 	    		    alert(ajax.status + ': ' + ajax.statusText);
 	    		  } else {
@@ -21,12 +19,10 @@
 	    		  		alert(data.error)
 	    		  	}
 	    		  }
-
 	    		}
 	    	}
     	}
     }
-
     document.addEventListener('keypress', trigger);
 	})();
 </script>
