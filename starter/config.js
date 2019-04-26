@@ -28,7 +28,6 @@ const starterConfig = {
     'views/*.html', 
     'datasource/*.json', 
     'app.js', 
-    'config.json', 
     'gulpfile.js', 
     'routes/**/*.js'
   ],

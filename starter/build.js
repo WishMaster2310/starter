@@ -8,7 +8,7 @@ const nunjucks = require('nunjucks');
 const del = require('del');
 const generate = require('nanoid/generate');
 const filters = require(path.join(__dirname, '../filters/filters'));
-const { getPageContext } = require(path.join(__dirname, '../workers/pages.js'));
+const { getPageContext } = require('./workers/pages.js');
 
 
 const env = nunjucks.configure('views', {

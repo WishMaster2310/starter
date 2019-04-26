@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const config = require(path.join(__dirname, '../config'));
+const dataSourcePath = path.join(__dirname, '../../datasource');
 
 module.exports = {
 	getPageContext
@@ -11,7 +12,7 @@ function getCommonData()  {
 	let result = {};
 	if (config.commonData) {
 		_.forEach(config.commonData, name => {
-			let d = JSON.parse(fs.readFileSync(path.join(__dirname, '../datasource', `${name}.json`)));
+			let d = JSON.parse(fs.readFileSync(path.join(dataSourcePath, `${name}.json`)));
 			result[name] = d
 		});
 	}
@@ -38,15 +39,13 @@ function getPageContext (page, isExport) {
 
 	if (page.pageData) {
 	 	_.forEach(page.pageData,  (v, k) => {
-	 		let d = JSON.parse(fs.readFileSync(path.join(__dirname, '../datasource', `${v}.json`)));
+	 		const d = JSON.parse(fs.readFileSync(path.join(dataSourcePath, `${v}.json`)));
 	 		options[v] = d
 	 	});
 	}
 
 	if (page.pageVars) {
-	 	_.forEach(page.pageVars, (v, k) => {
-	 		options.locals[k] = v
-	 	});
+	 	_.forEach(page.pageVars, (v, k) => { options.locals[k] = v });
 	}
   return { options }
 }
