@@ -7,6 +7,7 @@ const config = require('./config.json');
 
 const STARTER_CONFIG = require('./starter/config');
 const options = STARTER_CONFIG.tasks;
+
 const lessTasks = require('./starter/gulp_tasks/less')(options.less);
 const svgTasks = require('./starter/gulp_tasks/svg')(options.svg);
 const jsTasks = require('./starter/gulp_tasks/js')(options.js);

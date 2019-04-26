@@ -2,28 +2,7 @@
 
 Boilerplate для верстки проектов.
 
-## что новенького ##
-
-Надо бы как нибудь взять себя в руки и переписать ридмишку.
-Решил обновки выкидывать наверх. =)
-
-
-- Добавил фильтр для перевода числа в [LocaleString](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString) т.е. 10000 => 10 000
-
-```
-	{% set number = 10000 %}
-
-	{{ number | tls }} или {{ number | tls('en-US') }}
-
-	/*
-		Вернет => 10 000 (вставит пробел между разрядами)
-		В качестве единственного аргумента, принимает Локаль. 
-		Если не указана, то возьмет "по умолчанию"  родненькую 'ru-RU'
-	*/
-```
-
 ## Структура ##
-
 * Таск раннер - [Gulp](http://gulpjs.com/)
 * Сервер - [Express](http://expressjs.com/ru/guide/routing.html)
 * Шаблонизатор [Nunjucks](https://mozilla.github.io/nunjucks/)
