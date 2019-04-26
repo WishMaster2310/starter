@@ -90,8 +90,9 @@ const filters = {
 			`${config.storage}/${path}`: `${config.devStatic}storage/${path}` 
 	},
 	tls: (number, locale = 'ru-RU') => {
-		if (_.isNumber(number)) {
-			return number.toLocaleString(locale);
+		const parsed = +number;
+		if (_.isNumber(parsed)) {
+			return parsed.toLocaleString(locale);
 		} 
 		return number
 	}
