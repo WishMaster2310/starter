@@ -1,11 +1,11 @@
 'use strict';
 
-let fs = require('fs');
-let path = require('path');
-let express = require('express');
-let router = express.Router();
-let _ = require('lodash');
-let config = require('../config.json');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const router = express.Router();
+const _ = require('lodash');
+const config = require(path.join(__dirname, '../starter/config'));
 let commonData = {};
 
 if (config.commonData) {

@@ -3,7 +3,6 @@ const gulp = require('gulp');
 const log = require('fancy-log');
 const gls = require('gulp-live-server');
 const runSequence = require('run-sequence');
-const config = require('./config.json');
 
 const STARTER_CONFIG = require('./starter/config');
 const options = STARTER_CONFIG.tasks;
@@ -25,9 +24,8 @@ gulp.task('images:tinypng', imageTasks.tinypng);
 gulp.task('html:prettify', htmlTasks.prettify);
 
 gulp.task('default', () => {
-  let server = gls.new(['bin/www']);
+  let server = gls.new('bin/www');
   server.start();
-
   gulp.watch(STARTER_CONFIG.restartTriggerFiles, file => {
     log(`File ${path.basename(file.path)} was ${file.type} => restart server`);
     server.start.bind(server)();
@@ -57,7 +55,7 @@ gulp.task('copyStatic', () => {
       }
     })
   }
-  return gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
+  return gulp.src(arr).pipe(gulp.dest(`${STARTER_CONFIG.buildDir}`))
 });
 
 gulp.task('build', cb => {

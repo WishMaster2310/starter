@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
-const config = require('../config.json');
+const config = require(path.join(__dirname, '../starter/config'));
 
 
 function getAssetPath (p, dist = '') {
