@@ -5,8 +5,6 @@ const path = require('path');
 
 const components = path.join(__dirname, '..', 'public/less/components/components.less');
 
-
-
 function getComponentLocation (file) {
 	const letter = file.slice(0, 2);
 	const fName = file[1] === ':' ? file.slice(2) : file;
@@ -69,7 +67,7 @@ router.get('/add_less', (req, res, next) => {
 			component = '';
 
 	if (!result.error) {
-		content = `.${result.fName}{\n\n}`;
+		content = `.${result.fName} {\n\n}`;
 		component = `\n@import \'${result.fName}\';`;
 		fs.writeFile(result.lessPath, content, err => {
 		  if (err) {

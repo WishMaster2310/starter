@@ -1,195 +1,69 @@
-'use strict';
-const _ = require('lodash'),
-      path = require('path'),
-      gulp = require('gulp'),
-      del = require('del'),
-      log = require('fancy-log'),
-      less = require('gulp-less'),
-      gls = require('gulp-live-server'),
-      prettify = require('gulp-html-prettify'),
-      sourcemaps = require('gulp-sourcemaps'),
-      LessPluginAutoPrefix = require('less-plugin-autoprefix'),
-      LessPluginCleanCSS = require('less-plugin-clean-css'),
-      uglify = require('gulp-uglify'),
-      concat = require('gulp-concat'),
-      notify = require('gulp-notify'),
-      babel = require('gulp-babel'),
-      exec = require('child_process').exec,
-      gap = require('gulp-append-prepend'),
-      runSequence = require('run-sequence'),
-      imagemin = require('gulp-imagemin'),
-      svgSprite = require('gulp-svg-symbols'),
-      config = require('./config.json');
+const path = require('path');
+const gulp = require('gulp');
+const log = require('fancy-log');
+const gls = require('gulp-live-server');
+const runSequence = require('run-sequence');
+const config = require('./config.json');
 
-gulp.task('sprites', function () {
-  return gulp.src('public/svg/*.svg')
-    .pipe(svgSprite({
-      id: "i-%f",
-      svgClassname: "svg-icon-store",
-      templates: ['default-svg']
-    }))
-    .pipe(gulp.dest("views/blocks"));
-});
+const STARTER_CONFIG = require('./starter/config');
+const options = STARTER_CONFIG.tasks;
+const lessTasks = require('./starter/gulp_tasks/less')(options.less);
+const svgTasks = require('./starter/gulp_tasks/svg')(options.svg);
+const jsTasks = require('./starter/gulp_tasks/js')(options.js);
+const imageTasks = require('./starter/gulp_tasks/images')(options.images);
+const htmlTasks = require('./starter/gulp_tasks/html')(options.html);
 
-gulp.task('less:dev', () => {
-  const autoprefix = new LessPluginAutoPrefix({
-    browsers: ["last 2 versions"]
-  });
-
-  return gulp.src('public/less/*.less')
-    //.pipe(sourcemaps.init())
-    .pipe(gap.prependText(`@storage: "../storage/";`))
-    .pipe(less({
-      plugins: [autoprefix]
-    })
-      .on('error', notify.onError({
-        message: "Error: <%= error.message %>",
-        title: "Less Compile Error"
-      }))
-    )
-    //.pipe(sourcemaps.write('.', {includeContent: false, mapSources: 'public/less/**'}))
-    .pipe(gulp.dest('public/stylesheets/'));
-});
-
-gulp.task('less:prod', () => {
-  let cleancss = new LessPluginCleanCSS({
-    advanced: true
-  });
-
-  let autoprefix = new LessPluginAutoPrefix({
-    browsers: ["last 10 versions", "IE 8", "IE 9", "IE 10", "IE 11"]
-  });
-
-  return gulp.src('public/less/*.less')
-    .pipe(gap.prependText(`@storage: "${config.storage}";`))
-    .pipe(less({
-      plugins: [autoprefix, cleancss]
-    })
-      .on('error', notify.onError({
-        message: "Error: <%= error.message %>",
-        title: "Less Compile Error"
-      }))
-    )
-    .pipe(gulp.dest('public/stylesheets/'));
-});
-
-gulp.task('js', () => {
-  return gulp.src('public/javascripts/sources/*.js')
-    .pipe(sourcemaps.init())
-    .pipe(babel({ presets: ['env'] })
-      .on('error', notify.onError({
-        message: "Error: <%= error.message %>",
-        title: "JS Compile Error"
-      }))
-    )
-    .pipe(uglify())
-    .pipe(sourcemaps.write('../javascripts/'))
-    .pipe(gulp.dest('public/javascripts/'));
-});
-
-gulp.task('imgmin', () => {
-    return gulp.src('public/images/*')
-      .pipe(imagemin([
-          imagemin.gifsicle({ interlaced: true }),
-          imagemin.jpegtran({ progressive: true }),
-          imagemin.optipng({ optimizationLevel: 5 }),
-      ]))
-      .pipe(gulp.dest(`${config.buildDir}/images`))});
-
-gulp.task('compressLib', () => {
-  return gulp.src(['public/javascripts/libs/*.js'])
-    .pipe(uglify())
-    .pipe(concat('libs.js'))
-    .pipe(gulp.dest('public/javascripts/'));
-});
-
-gulp.task('lodash', cb => {
-  // require npm install -g lodash-cli
-  return exec(`lodash ${config.lodash} -p -o "public/javascripts/libs/lodash.custom.min.js"`, (err, stdout, stderr) => {
-    console.log(`lodash file created with: ${config.lodash}`);
-    cb(err)
-  })
-});
+gulp.task('svg:sprites', svgTasks.sprite);
+gulp.task('less:dev', lessTasks.dev);
+gulp.task('less:prod', lessTasks.prod);
+gulp.task('js:dev', jsTasks.dev);
+gulp.task('js:prod', jsTasks.prod);
+gulp.task('js:libs', jsTasks.libs);
+gulp.task('js:lodash', jsTasks.lodash);
+gulp.task('images:tinypng', imageTasks.tinypng);
+gulp.task('html:prettify', htmlTasks.prettify);
 
 gulp.task('default', () => {
   let server = gls.new(['bin/www']);
   server.start();
 
-  gulp.watch([
-    'views/blocks/*.html', 
-    'views/*.html', 
-    'datasource/*.json', 
-    'app.js', 
-    'config.json', 
-    'gulpfile.js', 
-    'routes/**/*.js'
-    ], file => {
-      log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
-      server.start.bind(server)();
-      server.notify.apply(server, [file]);
+  gulp.watch(STARTER_CONFIG.restartTriggerFiles, file => {
+    log(`File ${path.basename(file.path)} was ${file.type} => restart server`);
+    server.start.bind(server)();
+  });
+  gulp.watch(STARTER_CONFIG.reloadTriggerFiles, file => {
+    log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
+    server.notify.apply(server, [file]);
   });
 
-  gulp.watch([
-    'public/stylesheets/*.css',
-    'public/javascripts/*.js'
-    ], 
-    file => {
-      log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
-      server.notify.apply(server, [file]);
-  });
-
-  gulp.watch(['public/javascripts/libs/*.js'], ['compressLib']);
-  gulp.watch(['public/svg/*.svg'], ['sprites']);
-  gulp.watch(['public/javascripts/sources/*.js'], ['js']);
+  gulp.watch(['public/javascripts/libs/*.js'], ['js:libs']);
+  gulp.watch(['public/svg/*.svg'], ['svg:sprites']);
+  gulp.watch(['public/javascripts/sources/*.js'], ['js:dev']);
   gulp.watch(['public/less/*.less', 'public/less/**/*.less'], ['less:dev']);
 });
 
-gulp.task('clean', () => {
-  return del.sync([
-    `${config.buildDir}/*`,
-    `!${config.buildDir}/.git`,
-    `!${config.buildDir}/.git/**`
-  ])
-})
-
-gulp.task('compileHtml', cb => {
-  exec('node __export.js', (err) => {
-    cb(err);
-  });
-});
-
-gulp.task('exportHTML', () => {
-  return gulp.src(['html/*.html'])
-    .pipe(prettify({
-      indent_char: ' ',
-      indent_size: 2,
-      //unformatted: [],
-      no_preserve_newlines: true
-    }))
-    .pipe(gulp.dest(`${config.buildDir}`));
-});
-
-
 gulp.task('copyStatic', () => {
-  let arr = ['public/**'];
-  if (config.buildIgnore.length > 0 ) {
-    _.each(config.buildIgnore, el => {
-      if (el.split('.').length === 1 ) {
-        arr.push(`!public/${el}`, `!public/${el}/**`)
+  const arr = ['public/**'];
+  const { buildIgnorePaths } = STARTER_CONFIG;
+  if (buildIgnorePaths) {
+    buildIgnorePaths.forEach(ignoredPath => {
+      // FIXME: как то надо пофиксить проверку на директорию
+      // сейчас максимально ебано сделано
+      if (ignoredPath.split('.').length === 1 ) {
+        arr.push(`!public/${ignoredPath}`, `!public/${ignoredPath}/**`)
       } else {
-        arr.push(`!public/${el}`);
+        arr.push(`!public/${ignoredPath}`);
       }
     })
   }
-  
   return gulp.src(arr).pipe(gulp.dest(`${config.buildDir}`))
 });
 
-gulp.task('publish', ['compileHtml'], cb => {
-  runSequence('clean',
-              'exportHTML',
-              ['less:prod', 'js'],
-              'copyStatic',
-              'imgmin',
-              cb)
+gulp.task('build', cb => {
+  runSequence(
+    'js:libs',
+    'html:prettify',
+    'copyStatic',
+    ['less:prod', 'js:prod'],
+    cb)
 });

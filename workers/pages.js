@@ -6,6 +6,7 @@ const config = require(path.join(__dirname, '../', 'config.json'));
 module.exports = {
 	getPageContext
 }
+
 function getCommonData()  {
 	let result = {};
 	if (config.commonData) {

@@ -1,6 +1,7 @@
 'use strict'
 const fs = require('fs');
 const path = require('path');
+const _ = require('lodash');
 const config = require('../config.json');
 
 
@@ -87,6 +88,12 @@ const filters = {
 	cdn: path => {
 		return filters.export ? 
 			`${config.storage}/${path}`: `${config.devStatic}storage/${path}` 
+	},
+	tls: (number, locale = 'ru-RU') => {
+		if (_.isNumber(number)) {
+			return number.toLocaleString(locale);
+		} 
+		return number
 	}
 }
 

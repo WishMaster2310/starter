@@ -1,0 +1,12 @@
+[
+  {
+    "name": "index",
+    "route": "/",
+    "pageData": ["index"],
+    "pageVars": {
+      "title": "Главная страница",
+      "description": "Описание страницы",
+      "og": true
+    }
+  }
+]
