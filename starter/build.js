@@ -7,22 +7,17 @@ const templateDir = path.join(__dirname, '../views');
 const nunjucks = require('nunjucks');
 const del = require('del');
 const generate = require('nanoid/generate');
-const filters = require(path.join(__dirname, '../filters/filters'));
+const {applyFilters, createFilters} = require(path.join(__dirname, '../filters/filters'));
 const { getPageContext } = require('./workers/pages.js');
-
 
 const env = nunjucks.configure('views', {
   autoescape: false,
 });
+env.addGlobal('isExport', false);
+env.addGlobal('hash', generate('1234567890abcdef', 10));
 
-filters.hash = generate('1234567890abcdef', 10);
-filters.export = true;
-
-_.each(filters, (func, name) => {
-  if (name !== 'export') {
-    env.addFilter(name, func);
-  }
-});
+const filters = createFilters(env);
+applyFilters(env, filters);
 
 if (!fs.existsSync(compileDir)) {
 	fs.mkdirSync(compileDir);
@@ -63,4 +58,4 @@ function build () {
 	}
 }
 
-build ();
+build();

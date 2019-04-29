@@ -10,7 +10,7 @@ node_modules/*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-html/*
 build/*
 package-lock.json
 ./*zip
+*.env.local

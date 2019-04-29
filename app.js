@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/index');
 const starter = require('./routes/starter');
 const nunjucks = require('nunjucks');
-const filters = require('./filters/filters');
+const {applyFilters, createFilters} = require('./filters/filters');
 const app = express();
 const generate = require('nanoid/generate');
 
@@ -23,14 +23,10 @@ var env = nunjucks.configure('views', {
     watch: true
 });
 
-filters.hash = generate('1234567890abcdef', 10);
-
-_.each(filters, (func, name) => {
-  if (name !== 'export') {
-    env.addFilter(name, func);
-  }
-});
-
+env.addGlobal('isExport', false);
+env.addGlobal('hash', generate('1234567890abcdef', 10));
+const filters = createFilters(env);
+applyFilters(env, filters);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
