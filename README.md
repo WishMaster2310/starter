@@ -11,7 +11,7 @@ Boilerplate для верстки проектов.
 ### Dev Server ###
 
 ```sh
-	npm run watch
+	npm run dev
 ```
 
 ### Build ###
