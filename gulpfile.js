@@ -29,6 +29,7 @@ gulp.task('default', () => {
   gulp.watch(STARTER_CONFIG.restartTriggerFiles, file => {
     log(`File ${path.basename(file.path)} was ${file.type} => restart server`);
     server.start.bind(server)();
+    server.notify.apply(server, [file]);
   });
   gulp.watch(STARTER_CONFIG.reloadTriggerFiles, file => {
     log(`File ${path.basename(file.path)} was ${file.type} => livereload`);
