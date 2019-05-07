@@ -1,7 +1,5 @@
 # Фильтры
-
 Список встроенных фильтров [Nunjucks](https://mozilla.github.io/nunjucks/templating.html#builtin-filters)
-
 Свои фильтры можно добавлять в папку ``` filters ```
 
 ### tls
