@@ -13,7 +13,6 @@ function isExternalPath (path = '') {
   // т.е. начинается с http:// или с https://
   // или с domain.zone или c www.domain.zone
   const re = new RegExp('^((https?:)?\/\/)|^[a-zA-Z]+\..+\/');
-  console.log(path)
   return re.test(path);
 }
 
