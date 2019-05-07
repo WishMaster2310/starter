@@ -9,13 +9,11 @@ const exec = require('child_process').exec;
 
 function task (options) {
   const { prod, dev, libs, lodash } = options;
+  console.log(dev, dev.sourcemaps)
   return {
     dev: () => {
       return gulp.src(dev.src)
-        .pipe(gulpIf(
-          dev.sourcemaps,
-          sourcemaps.init()
-        ))
+        .pipe(sourcemaps.init())
         .pipe(babel(dev.babel)
           .on('error', notify.onError({
             message: "Error: <%= error.message %>",
@@ -25,10 +23,6 @@ function task (options) {
         .pipe(gulpIf(
           dev.uglify,
           uglify()
-        ))
-        .pipe(gulpIf(
-          dev.sourcemaps,
-          sourcemaps.write(dev.sourcemaps)
         ))
         .pipe(sourcemaps.write(dev.sourcemaps))
         .pipe(gulp.dest(dev.dest));

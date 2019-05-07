@@ -11,11 +11,11 @@ Boilerplate для верстки проектов.
 ### Dev Server ###
 
 ```sh
-	npm run dev
+npm run dev
 ```
 
 ### Build ###
 
 ```sh
-	npm run build
+npm run build
 ```

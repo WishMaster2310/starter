@@ -34,14 +34,14 @@ module.exports = {
       dest: "public/javascripts/",
       uglify: false,
       sourcemaps: "../javascripts/",
-      babel: { presets: ["env"] },
+      babel: { presets: ["@babel/preset-env"] },
     },
     prod: {
       src: "public/javascripts/sources/*.js",
       dest: "build/javascripts/",
       uglify: true,
       sourcemaps: "../javascripts/",
-      babel: { presets: ["env"] },
+      babel: { presets: ["@babel/preset-env"] },
     },
     libs: {
       src: ["public/javascripts/libs/*.js"],
