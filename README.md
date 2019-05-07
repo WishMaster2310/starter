@@ -1,5 +1,6 @@
 # Starter #
 Boilerplate для верстки проектов.
+Инфа по конфигурации и тп находится в разделе [wiki](https://github.com/WishMaster2310/starter/wiki)
 
 * Task Runner - [Gulp](http://gulpjs.com/)
 * Server - [Express](http://expressjs.com/ru/guide/routing.html)
