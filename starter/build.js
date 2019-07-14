@@ -13,7 +13,7 @@ const { getPageContext } = require('./workers/pages.js');
 const env = nunjucks.configure('views', {
   autoescape: false,
 });
-env.addGlobal('isExport', false);
+env.addGlobal('isExport', true);
 env.addGlobal('hash', generate('1234567890abcdef', 10));
 
 const filters = createFilters(env);
